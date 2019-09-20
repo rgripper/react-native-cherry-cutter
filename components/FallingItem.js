@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Animated, Text, View, Image, StyleSheet } from 'react-native';
+import { Animated, Image, StyleSheet } from 'react-native';
 
 class FallingItem extends React.Component {
   state = {
@@ -38,27 +38,26 @@ class FallingItem extends React.Component {
 
   render() {
     const { topAnim, isScattered } = this.state;
-    const { left, isDestroyed } = this.props;
-    const realLeft = Math.min(Math.max(left, 0), 90);
+    const { left, width, isCut } = this.props;
 
     return !isScattered ? (
       <Animated.View // Special animatable View
         style={{
           position: 'absolute',
-          width: '10%',
+          width: `${width}%`,
           height: '5%',
           top: topAnim.interpolate({
             inputRange: [0, 1],
             outputRange: ['0%', '100%'],
           }), // Bind top to animated value
-          left: `${this.props.left}%`,
+          left: `${left}%`,
         }}>
         <Image style={styles.cherry} source={require('../assets/cherry.png')} />
         <Image
           style={[
             styles.cherry,
             styles.splash,
-            { opacity: isDestroyed ? 1 : 0 },
+            { opacity: isCut ? 1 : 0 },
           ]}
           source={require('../assets/splash.png')}
         />
@@ -67,7 +66,7 @@ class FallingItem extends React.Component {
   }
 }
 
-export default FallingItem;//React.memo(FallingItem);
+export default React.memo(FallingItem);
 
 const styles = StyleSheet.create({
   cherry: {
